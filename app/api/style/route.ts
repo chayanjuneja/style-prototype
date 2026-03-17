@@ -1,17 +1,10 @@
-import fs from "fs"
-import path from "path"
-
 export async function POST(req: Request) {
 
   const { prompt } = await req.json()
 
-  const filePath = path.join(process.cwd(),"data","store.json")
+  const profile = {}
 
-  const store = JSON.parse(fs.readFileSync(filePath,"utf8"))
-
-  const profile = store.profile
-
- const enhancedPrompt = `
+  const enhancedPrompt = `
 User style profile:
 ${JSON.stringify(profile)}
 
@@ -60,24 +53,15 @@ Format exactly like this:
 
   const aiText = data?.choices?.[0]?.message?.content || "{}"
 
-let result
+  let result
 
-try{
- result = JSON.parse(aiText)
-}catch{
- result = {error:"AI parse failed"}
-}
+  try{
+    result = JSON.parse(aiText)
+  }catch{
+    result = {error:"AI parse failed"}
+  }
 
+  console.log("FINAL RESULT:", result)
 
-/* ---------------- SAVE HISTORY ---------------- */
-
-store.history.push({
-  prompt,
-  result,
-  timestamp:Date.now()
-})
-  fs.writeFileSync(filePath,JSON.stringify(store,null,2))
-console.log("IMAGE VALUE:", result.image)  
-console.log("FINAL RESULT:", result)
-  return Response.json( result )
+  return Response.json(result)
 }
