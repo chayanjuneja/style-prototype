@@ -1,6 +1,5 @@
 import fs from "fs"
 import path from "path"
-import Replicate from "replicate"
 
 export async function POST(req: Request) {
 
@@ -69,52 +68,7 @@ try{
  result = {error:"AI parse failed"}
 }
 
-/* -------- IMAGE GENERATION (REPLICATE FIXED) -------- */
 
-const replicate = new Replicate({
-  auth: process.env.REPLICATE_API_TOKEN!,
-})
-
-const imagePrompt = `fashion model wearing ${result.top}, ${result.bottom}, ${result.shoes}, studio lighting, clean background`
-
-console.log("IMAGE PROMPT:", imagePrompt)
-
-let imageUrl = ""
-
-try {
-  const prediction = await replicate.predictions.create({
-    version: "stability-ai/sdxl:latest",
-    input: {
-      prompt: imagePrompt
-    }
-  })
-
-  console.log("PREDICTION:", prediction)
-
-  let resultPrediction = prediction
-
-  while (
-    resultPrediction.status !== "succeeded" &&
-    resultPrediction.status !== "failed"
-  ) {
-    await new Promise(r => setTimeout(r, 1000))
-
-    resultPrediction = await replicate.predictions.get(
-      prediction.id
-    )
-  }
-
-  console.log("FINAL PREDICTION:", resultPrediction)
-
-  if (resultPrediction.status === "succeeded") {
-    imageUrl = resultPrediction.output?.[0] || ""
-  }
-
-} catch (err) {
-  console.error("REPLICATE ERROR:", err)
-}
-
-result.image = imageUrl
 /* ---------------- SAVE HISTORY ---------------- */
 
 store.history.push({

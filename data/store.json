@@ -290,6 +290,18 @@
         "image": ""
       },
       "timestamp": 1773728917319
+    },
+    {
+      "prompt": "Event: work. Casual Friday outfit",
+      "result": {
+        "top": "White or light-colored button-down shirt or blouse",
+        "bottom": "Dark washed straight-leg or slim-fit jeans",
+        "shoes": "Black or navy ankle boots or loafers",
+        "accessories": "Minimal silver or leather necklace or a simple watch",
+        "confidence": 8,
+        "reason": "A simple, classic look with a touch of sophistication for a Casual Friday at work."
+      },
+      "timestamp": 1773745518011
     }
   ]
 }
